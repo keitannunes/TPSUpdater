@@ -198,7 +198,6 @@ func main() {
 	}
 	fmt.Printf("TPS Client outdated, downloading update %s...\n", apiResp.Name)
 	fmt.Printf("Download URI: %s\n", apiResp.Uri)
-	fmt.Println("Press 'Enter' to continue...")
 	resp, err = http.Get(apiResp.Uri)
 	if err != nil {
 		fmt.Println("Error making the request:", err)
