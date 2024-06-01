@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-var updaterVersion string = "0.1.0"
+var updaterVersion string = "0.1.1"
 
 type Config struct {
 	Updater UpdaterConfig `toml:"updater"`
