@@ -2,6 +2,7 @@ package main
 
 import (
 	"archive/zip"
+	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -111,7 +112,7 @@ func main() {
 	fmt.Println("Starting Updater...")
 	fmt.Println("Loading Config...")
 
-	file, err := os.ReadFile("tps.toml")
+	file, err := os.ReadFile("egts.toml")
 	if err != nil {
 		fmt.Println("Error opening Config file:", err)
 		return
@@ -139,7 +140,7 @@ func main() {
 		fmt.Println("Error reading the response body:", err)
 		return
 	}
-	updaterUri := string(body)
+	updaterUri := strings.TrimSpace(string(body))
 	resp, err = http.Get(updaterUri + "version")
 	if err != nil {
 		fmt.Println("Error making the request:", err)
@@ -185,6 +186,9 @@ func main() {
 		return
 	}
 	fmt.Printf("TPS Client outdated, downloading update %s...\n", apiResp.Name)
+	fmt.Printf("Download URI: %s\n", apiResp.Uri)
+	fmt.Println("Press 'Enter' to continue...")
+	bufio.NewReader(os.Stdin).ReadBytes('\n')
 	resp, err = http.Get(apiResp.Uri)
 	if err != nil {
 		fmt.Println("Error making the request:", err)
@@ -205,7 +209,7 @@ func main() {
 		return
 	}
 	fmt.Println("Extracting update...")
-	err = extractZip("update.zip", "../../")
+	err = extractZip("update.zip", ".")
 	if err != nil {
 		fmt.Println("Error extracting the update:", err)
 		return
