@@ -1,4 +1,4 @@
 [updater]
 release = "latest"
-version = "latest$2.0" #Do not change this
+version = "" #Do not change this
 password = "" #leave this empty for latest
