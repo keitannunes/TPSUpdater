@@ -2,7 +2,6 @@ package main
 
 import (
 	"archive/zip"
-	"bufio"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -10,6 +9,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 )
@@ -107,7 +107,17 @@ func deleteDirectories(basePath, prefix string) error {
 
 	return nil
 }
-
+func startGame() {
+	cmd := exec.Command("./taiko.exe")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+	err := cmd.Start()
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+}
 func main() {
 	fmt.Println("Starting Updater...")
 	fmt.Println("Loading Config...")
@@ -167,7 +177,8 @@ func main() {
 		return
 	}
 	if resp.StatusCode == 304 {
-		fmt.Println("Game already up to date, Updater finished")
+		fmt.Println("Game already up to date, Starting taiko")
+		startGame()
 		return
 	}
 	if resp.StatusCode != 200 {
@@ -188,7 +199,6 @@ func main() {
 	fmt.Printf("TPS Client outdated, downloading update %s...\n", apiResp.Name)
 	fmt.Printf("Download URI: %s\n", apiResp.Uri)
 	fmt.Println("Press 'Enter' to continue...")
-	bufio.NewReader(os.Stdin).ReadBytes('\n')
 	resp, err = http.Get(apiResp.Uri)
 	if err != nil {
 		fmt.Println("Error making the request:", err)
@@ -237,5 +247,6 @@ func main() {
 	if err := toml.NewEncoder(f).Encode(config); err != nil {
 		fmt.Println("Error encoding the config:", err)
 	}
-	fmt.Println("Updater exiting...")
+	fmt.Println("Starting Taiko...")
+	startGame()
 }
