@@ -209,7 +209,7 @@ func main() {
 		return
 	}
 	fmt.Println("Extracting update...")
-	err = extractZip("update.zip", ".")
+	err = extractZip("update.zip", "../../")
 	if err != nil {
 		fmt.Println("Error extracting the update:", err)
 		return
