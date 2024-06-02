@@ -185,10 +185,11 @@ func main() {
 		fmt.Println("Error decoding the response body:", err)
 		return
 	}
-	fmt.Printf("TPS Client outdated, downloading update %s...\n", apiResp.Name)
+	fmt.Printf("EGTS Client outdated, downloading update %s...\n", apiResp.Name)
 	fmt.Printf("Download URI: %s\n", apiResp.Uri)
 	fmt.Println("Press 'Enter' to continue...")
 	bufio.NewReader(os.Stdin).ReadBytes('\n')
+	fmt.Println("CURRENTLY DOWNLOADING!!! DO NOT CLOSE WINDOW!!")
 	resp, err = http.Get(apiResp.Uri)
 	if err != nil {
 		fmt.Println("Error making the request:", err)
@@ -227,7 +228,8 @@ func main() {
 
 	}
 	fmt.Println("Updating config to reflect new version...")
-	f, err := os.Create("tps.toml")
+	config.Updater.Version = apiResp.Version
+	f, err := os.Create("egts.toml")
 	if err != nil {
 		fmt.Println("Error creating the config:", err)
 	}
